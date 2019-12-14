@@ -96,8 +96,8 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 		pos[i].x = 0;
 		pos[i].y = 0;
 
-		despos[i].x = 1000 - pos[0].w / 2;
-		despos[i].y = 300 + i * 100;
+		despos[i].x = 1050 - pos[0].w / 2;
+		despos[i].y = 170 + i * 100;
 
 		despos[i].w = pos[i].w;
 		despos[i].h = pos[i].h;
@@ -107,7 +107,7 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 
 	//Background cua man hinh Menu
 	//create a tempSurface
-	tempSurface = IMG_Load("Image\\backgroungd.bmp");
+	tempSurface = IMG_Load("Image\\background.jpg");
 	//create a texutre from surface
 	texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
 	//free surface
@@ -253,7 +253,7 @@ string EnterPlayerName(SDL_Window*& window, SDL_Renderer*& renderer)
 	SDL_Rect sourceRect;
 	SDL_Rect desRect;
 
-	backgr = IMG_Load("Image\\backgroungd.bmp");
+	backgr = IMG_Load("Image\\inname.jpg");
 	background = SDL_CreateTextureFromSurface(renderer, backgr);
 	SDL_FreeSurface(backgr);
 	SDL_QueryTexture(background, NULL, NULL, &sourceRect.w, &sourceRect.h);
@@ -300,7 +300,7 @@ string EnterPlayerName(SDL_Window*& window, SDL_Renderer*& renderer)
 	pos.x = 0;
 	pos.y = 0;
 
-	despos.y = 300;
+	despos.y = 340;
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 	int x, y;
 	SDL_RenderCopy(renderer, background, &sourceRect, &desRect);
@@ -349,7 +349,7 @@ string EnterPlayerName(SDL_Window*& window, SDL_Renderer*& renderer)
 				SDL_FreeSurface(temp);
 				TTF_SizeText(font, text.c_str(), &pos.w, &pos.h);
 
-				despos.x = 627 - pos.w / 2;
+				despos.x = 600 - pos.w / 2;
 
 				despos.w = pos.w;
 				despos.h = pos.h;
@@ -411,8 +411,8 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 		pos[i].x = 0;
 		pos[i].y = 0;
 
-		despos[i].x = 200 - pos[0].w / 2;
-		despos[i].y = 300 + i * 100;
+		despos[i].x = 1075 - pos[0].w / 2;
+		despos[i].y = 200 + i * 100;
 
 		despos[i].w = pos[i].w;
 		despos[i].h = pos[i].h;
@@ -422,7 +422,7 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 
 	//Background cua man hinh Menu
 	//create a tempSurface
-	tempSurface = IMG_Load("Image\\backgroungd.bmp");
+	tempSurface = IMG_Load("Image\\typegame.jpeg");
 	//create a texutre from surface
 	texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
 	//free surface
@@ -438,6 +438,42 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 	desRect.y = 0;
 	desRect.w = sourceRect.w;
 	desRect.h = sourceRect.h;
+	
+	//Tao cac demo choi game
+	SDL_Surface* demo = NULL;
+	SDL_Texture* demo1 = NULL;
+	SDL_Texture* demo2 = NULL;
+	SDL_Rect d_rect1, d_rect2, d_desrect1, d_desrect2;
+
+	demo = IMG_Load("Image//demo1.bmp");
+	demo1 = SDL_CreateTextureFromSurface(renderer, demo);
+
+	demo = IMG_Load("Image//demo2.bmp");
+	demo2 = SDL_CreateTextureFromSurface(renderer, demo);
+
+	//Set toa do cua cac hinh demo
+
+	d_rect1.x = 0;
+	d_rect1.y = 0;
+	d_rect1.w = 340;
+	d_rect1.h = 470;
+
+	d_desrect1.x = 209;
+	d_desrect1.y = 130;
+	d_desrect1.w = d_rect1.w;
+	d_desrect1.h = d_rect1.h;
+
+	d_rect2.x = 0;
+	d_rect2.y = 0;
+	d_rect2.w = 340;
+	d_rect2.h = 470;
+
+	d_desrect2.x = 209;
+	d_desrect2.y = 130;
+	d_desrect2.w = d_rect2.w;
+	d_desrect2.h = d_rect2.h;
+
+	
 
 	//set background color black
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -472,6 +508,8 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 							menus[i] = TTF_RenderText_Solid(font, menu[i], color[1]);
 							Message[i] = SDL_CreateTextureFromSurface(renderer, menus[i]);
 						}
+						
+						
 					}
 					else
 					{
@@ -498,7 +536,7 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 						{
 						case 0:
 						{
-							Start_new(window, renderer);
+							Start_new(window, renderer, name_player);
 							break;
 						}
 						case 1:
@@ -533,6 +571,11 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 		{
 			SDL_RenderCopy(renderer, Message[i], &pos[i], &despos[i]);
 		}
+		if (selected[0])
+			SDL_RenderCopy(renderer, demo1, &d_rect1, &d_desrect1);
+
+		if (selected[1])
+			SDL_RenderCopy(renderer, demo2, &d_rect2, &d_desrect2);
 
 		SDL_RenderPresent(renderer);
 
@@ -553,10 +596,11 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 	int x, y;
 	TTF_Font* font;
 	font = TTF_OpenFont("test.ttf", 50);
-	const int highScore = 5;
+	const int highScore = 10;
 	bool selected;
 	//Khoi tao ten cho cac nut man hinh high score
 	char menu[highScore][11];
+
 	FILE* file;
 	file= fopen("HighScore.txt", "r");
 	if (file == NULL)
@@ -568,18 +612,20 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 		fscanf(file, "%s[^\n]", menu[j]);
 	}
 	fclose(file);
-	SDL_Surface* menus[highScore];
-	SDL_Surface* back_b;
-	SDL_Rect pos[highScore];
 
 	//Mau khi cham va khong cham cua cac nut man hinh high score
 	SDL_Color color[2] = { { 255, 255, 255 }, { 255, 0, 0 } };
+	
+	SDL_Surface* menus[highScore];
+	SDL_Surface* back_b;
+	SDL_Rect pos[highScore];
+	
 
 	back_b = TTF_RenderText_Solid(font, back, color[0]);
 
 	for (int i = 0; i < highScore; i++)
 	{
-		menus[i] = TTF_RenderText_Solid(font, menu[i], color[0]);
+		menus[i] = CreateSurfaceFromString(menu[i], font, color[0]);
 	}
 
 	SDL_Texture* Message[highScore];
@@ -594,17 +640,27 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 	//Khoi tao mang chua vi tri cac nut man hinh high score
 	SDL_Rect despos[highScore];
 
-	for (int i = 0; i < highScore; i++)
+	for (int i = 0; i < highScore; i+=2)
 	{
 		TTF_SizeText(font, menu[i], &pos[i].w, &pos[i].h);
 		pos[i].x = 0;
 		pos[i].y = 0;
 
-		despos[i].x = 637 - pos[0].w / 2;
-		despos[i].y = 200 + i * 70;
+		despos[i].x = 430 - pos[0].w / 2;
+		despos[i].y = 180 + i/2 * 94;
 
 		despos[i].w = pos[i].w;
 		despos[i].h = pos[i].h;
+
+		TTF_SizeText(font, menu[i+1], &pos[i+1].w, &pos[i+1].h);
+		pos[i+1].x = 0;
+		pos[i+1].y = 0;
+
+		despos[i+1].x = 750 - pos[1].w / 2;
+		despos[i+1].y = 180 + i/2 * 94;
+
+		despos[i+1].w = pos[i+1].w;
+		despos[i+1].h = pos[i+1].h;
 
 	}
 	//Nut Back
@@ -622,7 +678,7 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 
 	//Background cua man hinh high score
 	//create a tempSurface
-	tempSurface = IMG_Load("Image\\backgroungd.bmp");
+	tempSurface = IMG_Load("Image\\highscore.jpg");
 	//create a texutre from surface
 	texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
 	//free surface
@@ -732,7 +788,7 @@ void exit(SDL_Window*& window, SDL_Renderer*& renderer)
 }
 
 //Choi game the loai moi
-void Start_new(SDL_Window*& window, SDL_Renderer*& renderer)
+void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 {
 	const int numb_obj = 160;
 	int ox[numb_obj];
@@ -740,7 +796,7 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer)
 	int key[numb_obj];
 	int numb = 0;
 	ifstream file;
-	file.open("map//3.txt");
+	file.open("map//4.txt");
 	if (!file)
 	{
 		cout << "mo file loi" << endl;
@@ -776,16 +832,49 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer)
 		rect[i].x = 0;
 		rect[i].y = 0;
 
-		keyRect[i].x = ox[i];
-		keyRect[i].y = oy[i];
+		keyRect[i].x = ox[i] + 444;
+		keyRect[i].y = oy[i] + 140;
 
 		keyRect[i].w = rect[i].w;
 		keyRect[i].h = rect[i].h;
 	}
 
+	//Save Game
+	SDL_Surface* s;
+	SDL_Texture* save;
+	SDL_Color color[2] = { { 255, 255, 255 }, { 255, 0, 0 } };
+	const char* sa = "Save";
+	SDL_Rect s_rect;
+	SDL_Rect s_desrect;
+	TTF_Font* font;
+	font = TTF_OpenFont("test.ttf" , 50);
+
+	s = TTF_RenderText_Solid(font, sa, color[0]);
+	save = SDL_CreateTextureFromSurface(renderer, s);
+
+	TTF_SizeText(font, sa, &s_rect.w, &s_rect.h);
+	s_rect.x = 0;
+	s_rect.y = 0;
+
+	s_desrect.x = 150 - s_rect.w / 2;
+	s_desrect.y = 600;
+
+	s_desrect.w = s_rect.w;
+	s_desrect.h = s_rect.h;
+
+	//Khung diem so
+	SDL_Surface* temp;
+	SDL_Texture* text;
+	SDL_Rect sc_rect, sc_desrect;
+
+	sc_rect.x = 0;
+	sc_rect.y = 0;
+
+	sc_desrect.y = 150;
+
 	//Background cua man hinh Menu
 	//create a tempSurface
-	tempSurface = IMG_Load("Image\\backgroungd.bmp");
+	tempSurface = IMG_Load("Image\\ingame.bmp");
 	//create a texutre from surface
 	texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
 	//free surface
@@ -802,27 +891,183 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer)
 	desRect.w = sourceRect.w;
 	desRect.h = sourceRect.h;
 
-
-
-	
+	int score = 0;
+	int last_score = 0;
+	string score_text="100";
+	SDL_Event e;
+	int selected =0;
 	while (true)
 	{
+		SDL_RenderClear(renderer);
+		//main event
+		while (SDL_PollEvent(&e))
+		{
+			switch (e.type)
+			{
+				//User - requested quit
+			case SDL_QUIT:
+			{
+				SDL_Quit();
+			}
+			case SDL_MOUSEMOTION:
+			{
+				x = e.motion.x;
+				y = e.motion.y;
 
-		//Main game
+				if (x >= s_desrect.x && x <= s_desrect.x + s_desrect.w && y >= s_desrect.y && y <= s_desrect.y + s_desrect.h)
+				{
+					if (!selected)
+					{
+						selected = 1;
+						SDL_FreeSurface(s);
+						s = TTF_RenderText_Solid(font, sa, color[1]);
+						save = SDL_CreateTextureFromSurface(renderer, s);
+					}
+				}
+				else
+				{
+					if (selected)
+					{
+						selected = 0;
+						SDL_FreeSurface(s);
+						s = TTF_RenderText_Solid(font, sa, color[0]);
+						save = SDL_CreateTextureFromSurface(renderer, s);
+					}
+				}
+				break;
+			}
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				x = e.motion.x;
+				y = e.motion.y;
 
+				if (x >= s_desrect.x && x <= s_desrect.x + s_desrect.w && y >= s_desrect.y && y <= s_desrect.y + s_desrect.h)
+				{
+					ofstream file;
+					string str = "save\\" + name + ".txt";
+					file.open(str);
+					for (int i = 0; i < numb; i++)
+					{
+						if (key[i] != 0)
+						{
+							file << ox[i] << "	" << oy[i] << "	" << key[i] << endl;
+						}
+					}
+
+					file.close();
+					Save(window, renderer, name);
+
+					SDL_Surface* shit;
+					SDL_Texture* shit_t;
+					SDL_Rect t_rect, t_desrect;
+
+					TTF_Font* font1 = TTF_OpenFont("test.ttf", 100);
+
+
+					const char* sh = "Saved";
+
+					shit = TTF_RenderText_Solid(font1, sh, color[0]);
+					shit_t = SDL_CreateTextureFromSurface(renderer, shit);
+
+					TTF_SizeText(font1, sh, &t_rect.w, &t_rect.h);
+
+					t_rect.x = 0;
+					t_rect.y = 0;
+
+					t_desrect.x = 400 + t_rect.w / 2;
+					t_desrect.y = 500 / 2 + t_rect.h / 2;
+					t_desrect.w = t_rect.w;
+					t_desrect.h = t_rect.h;
+
+					SDL_FreeSurface(shit);
+
+					int k = 0;
+					int i = 0;
+					SDL_RenderCopy(renderer, shit_t, &t_rect, &t_desrect);
+					SDL_RenderPresent(renderer);
+					while (true)
+					{
+						while (SDL_PollEvent(&e))
+						{
+							
+						}
+						SDL_RenderCopy(renderer, texture, &sourceRect, &desRect);
+						SDL_RenderCopy(renderer, text, &sc_rect, &sc_desrect);
+						//Chen cac object vao man hinh
+						for (int i = 0; i < numb; i++)
+						{
+							SDL_RenderCopy(renderer, object[i], &rect[i], &keyRect[i]);
+						}
+
+						SDL_RenderCopy(renderer, save, &s_rect, &s_desrect);
+						SDL_RenderCopy(renderer, shit_t, &t_rect, &t_desrect);
+						SDL_RenderPresent(renderer);
+						if (e.type == SDL_KEYDOWN && (e.key.keysym.sym == SDLK_KP_ENTER || e.key.keysym.sym == SDLK_RETURN))
+						{
+							break;
+						}
+					}
+				}
+				break;
+			}
+			default:
+			{
+				break;
+			}
+			}
+		}
+		score++;
+		if (score != last_score)
+		{
+			last_score = score;
+			score_text = to_string(last_score);
+			temp = CreateSurfaceFromString(score_text.c_str(), font, color[0]);
+			text = SDL_CreateTextureFromSurface(renderer, temp);
+			SDL_FreeSurface(temp);
+			TTF_SizeText(font, score_text.c_str(), &sc_rect.w, &sc_rect.h);
+
+			sc_desrect.x = 150 - sc_rect.w / 2;
+
+			sc_desrect.w = sc_rect.w;
+			sc_desrect.h = sc_rect.h;
+		}
 		
 		SDL_RenderCopy(renderer, texture, &sourceRect, &desRect);
+		SDL_RenderCopy(renderer, text, &sc_rect, &sc_desrect);
 		//Chen cac object vao man hinh
 		for (int i = 0; i < numb; i++)
 		{
 			SDL_RenderCopy(renderer, object[i], &rect[i], &keyRect[i]);
-			cout << i << endl;
 		}
 		
+		SDL_RenderCopy(renderer, save, &s_rect, &s_desrect);
 		SDL_RenderPresent(renderer);
 	}
-	getchar();
 }
 
 //Choi game the loai co dien dooi khang 1v1
 void Start_classic();
+
+//Khung save game
+void Save(SDL_Window*& window, SDL_Renderer*& renderer, string name)
+{
+	fstream file;
+	file.open("save\\dat.txt");
+	string str;
+	bool ktr = true;
+	while (!file.eof())
+	{
+		getline(file, str);
+		if (str.compare(name) == 0)
+		{
+			ktr = false;
+			break;
+		}
+	}
+	if (ktr == true)
+	{
+		file << name << endl;
+	}
+
+	file.close();
+}

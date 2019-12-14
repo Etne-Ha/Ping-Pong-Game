@@ -25,6 +25,8 @@ void load(SDL_Window*& window, SDL_Renderer*& renderer);
 
 void exit(SDL_Window*& window, SDL_Renderer*& renderer);
 
-void Start_new(SDL_Window*& window, SDL_Renderer*& renderer);
+void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name);
 
 void Start_classic();
+
+void Save(SDL_Window*& window, SDL_Renderer*& renderer, string name);
