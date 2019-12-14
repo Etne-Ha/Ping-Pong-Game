@@ -6,6 +6,10 @@
 #include <math.h>
 #include <string>
 
+//sai so cho phep
+#define epsilon 10
+
+//max v
 #define MAX_V 10
 
 using namespace std;

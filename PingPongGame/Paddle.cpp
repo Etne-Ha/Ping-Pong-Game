@@ -107,7 +107,7 @@ Paddle::Paddle(int x, int y, int size, int left_limit, int right_limit, string p
 	_height = 32;
 
 	//Khoi tao van toc thanh truot
-	_v = 5;
+	_v = 4;
 	//load hinh paddle
 	LoadFromFile(path, gRenderer);
 }
@@ -116,6 +116,7 @@ Paddle::Paddle(int x, int y, int size, int left_limit, int right_limit, string p
 // hàm tạo lại thanh trượt 
 void Paddle::reset()
 {
+	_v = 4;
 	this->_paddle_pos.x = this->_paddle_original_pos.x; // gán x bằng x gốc 
 	this->_paddle_pos.y = this->_paddle_original_pos.y; // gán y bằng y gốc 
 	this->_paddle_dir = NONE;

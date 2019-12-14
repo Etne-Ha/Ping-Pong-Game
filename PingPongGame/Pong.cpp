@@ -45,6 +45,8 @@ void Pong::runMenu()
 // hàm để cập nhật banh
 void Pong::updateBall(SDL_Renderer*& gRenderer)
 {
+	this->_ball->move(_playerBottom, _playerTop);
+
 	if (this->_ball->impactBottom(this->_playerBottom)) // kiểm tra va chạm với thanh trượt dưới 
 	{
 		// nếu xảy ra va chạm thì thực hiện loạt các hoạt động sau 
@@ -59,6 +61,7 @@ void Pong::updateBall(SDL_Renderer*& gRenderer)
 		//tang van toc 10%
 		if (sqrt(_ball->VX() * _ball->VX() + _ball->VY() * _ball->VY()) < MAX_V)
 		{
+			_playerBottom->SetV(_playerBottom->V() * 150 / 100);
 			_ball->SetVX(_ball->VX() * 110 / 100);
 			_ball->SetVY(_ball->VY() * 110 / 100);
 		}
@@ -80,6 +83,7 @@ void Pong::updateBall(SDL_Renderer*& gRenderer)
 			//tang van toc 10%
 			if (sqrt(_ball->VX() * _ball->VX() + _ball->VY() * _ball->VY()) < MAX_V)
 			{
+				_playerTop->SetV(_playerTop->V() * 150 / 100);
 				_ball->SetVX(_ball->VX() * 110 / 100);
 				_ball->SetVY(_ball->VY() * 110 / 100);
 			}
@@ -106,7 +110,7 @@ void Pong::updateBall(SDL_Renderer*& gRenderer)
 			}
 		}
 	}
-	this->_ball->move(_playerBottom, _playerTop);
+	
 	this->_ball->draw(gRenderer);
 }
 
@@ -145,10 +149,10 @@ void Pong::runGame()
 	Paddle p1((_right + _left) / 2, _top + 100, 120, _left, _right, "bar1.png", screen.GRenderer(), NONE); // tạo thanh trượt trên
 	this->_playerTop = &p1; // trỏ tới thanh trượt trên
 
-	Paddle p2((_right + _left) / 2, _bot - 100, 120, _left, _right, "bar1.png", screen.GRenderer(), NONE); // tạo thanh trượt dưới 
+	Paddle p2((_right + _left) / 2, _bot - 100, 120, _left, _right, "bar2.png", screen.GRenderer(), NONE); // tạo thanh trượt dưới 
 	this->_playerBottom = &p2; // trỏ tới thanh trượt dưới
 
-	Ball b((_right + _left) / 2, (_top + _bot) / 2, SPEED, "ball.png", screen.GRenderer(), DOWN); // tạo trái banh
+	Ball b((float)(_right + _left) / 2, (float)(_top + _bot) / 2, SPEED, "ball.png", screen.GRenderer(), DOWN); // tạo trái banh
 	this->_ball = &b; // trỏ tới trái banh
 
 	this->setSpeed(this->_ball->getSpeed()); // láy tốc độ của banh
@@ -211,8 +215,6 @@ void Pong::runGame()
 		//cap nhat man hinh
 		screen.Update();
 	}
-
-	screen.Close();
 }
 
 
@@ -355,10 +357,10 @@ void Pong::resetGameInfo()
 		{
 			this->runEndGame(); // tới hàm kết thúc 
 		}
-		this->showScoreBoard(); // xuất bảng điểm
-		this->_ball->clear(); // xóa banh
-		this->_playerTop->clear(); // xóa thanh trượt trên 
-		this->_playerBottom->clear(); // xóa thanh trượt dưới 
+		//this->showScoreBoard(); // xuất bảng điểm
+		//this->_ball->clear(); // xóa banh
+		//this->_playerTop->clear(); // xóa thanh trượt trên 
+		//this->_playerBottom->clear(); // xóa thanh trượt dưới 
 		this->_ball->reset(); // tạo lại banh
 		this->_playerTop->reset(); // tạo lại thanh trượt trên
 		this->_playerBottom->reset();; // tạo lại thanh trượt dưới 
@@ -577,11 +579,11 @@ float Pong::calculatePosBottom(float& dest_pos)
 	}
 	if (dest_pos == 0 && ball_pos.y == 3 && (ball_dir == DOWN || ball_dir == DOWNLEFT || ball_dir == DOWNRIGHT)) // nếu vị trí cần chuyển tới là 0 , vị trí của banh đang là cách thanh trượt trên 1 đơn vị và đang di chuyển xuống thì thanh trượt bắt đầu tính toán vị trí cần tới mới 
 	{
-		int distance_height = this->_playerBottom->getPos().y - ball_pos.y - 1; // khoảng cách từ banh tới biên đối diện ( tường dưới )
-		int pos = this->_playerBottom->getPos().x - ball_pos.x; // tính vị trị tương đối giữa thanh trượt và trái banh theo tọa độ x
+		float distance_height = this->_playerBottom->getPos().y - ball_pos.y - 1; // khoảng cách từ banh tới biên đối diện ( tường dưới )
+		float pos = this->_playerBottom->getPos().x - ball_pos.x; // tính vị trị tương đối giữa thanh trượt và trái banh theo tọa độ x
 		if (ball_dir == DOWNLEFT) // trường hợp banh di chuyển xuống qua trái 
 		{
-			int distance_width = ball_pos.x - 1 - _left; // khoảng cách từ banh tới tường trái 
+			float distance_width = ball_pos.x - 1 - _left; // khoảng cách từ banh tới tường trái 
 			if (distance_width >= distance_height) // trường hợp banh di chuyển chéo màn hình mà không va chạm với tường 
 			{
 				if (pos > 0 || (pos < 0 && abs(pos) < distance_height) || pos == 0) // xét các vị trí thanh trượt năm bên phải banh hoặc thanh trượt nằm bên trái banh nhưng vị trí tượng đối của nó nhỏ hơn khoảng cách tới tường dưới ( theo x - tức là di chuyển một khoảng x thì banh sẽ chạm đáy )
@@ -597,7 +599,7 @@ float Pong::calculatePosBottom(float& dest_pos)
 			}
 			else // trường hợp banh di chuyển chéo màn hình có va chạm với tường 
 			{
-				int distance = distance_height - distance_width; // do banh chỉ di chuyển theo gốc 45 độ nên khi lấy khoảng cách từ banh tới tường dưới trừ cho khoảng cách từ banh tới tường trái ta sẽ có được khoảng cách từ tường trái cho đến vị trí banh sẽ đáp xuống ở tường dưới 
+				float distance = distance_height - distance_width; // do banh chỉ di chuyển theo gốc 45 độ nên khi lấy khoảng cách từ banh tới tường dưới trừ cho khoảng cách từ banh tới tường trái ta sẽ có được khoảng cách từ tường trái cho đến vị trí banh sẽ đáp xuống ở tường dưới 
 				if ((pos < 0 && distance > this->_playerBottom->getPos().x) || (pos > 0 && distance > this->_playerBottom->getPos().x) || (pos == 0 && distance > this->_playerBottom->getPos().x)) // xét trường hợp vị trí khi thanh trượt nằm bên trái hoặc bên phải hoặc ngang bằng với trái banh và khoảng cách từ tường trái cho đến vị trí đáp xuống ở tường dưới của banh lớn hơn khoảng cách của thanh trượt tới tường trái 
 				{
 					this->_playerBottom->setDir(PRIGHT);  // thanh trượt di chuyển sang phải 
@@ -614,7 +616,7 @@ float Pong::calculatePosBottom(float& dest_pos)
 		{
 			if (ball_dir == DOWNRIGHT) // trường hợp banh di chuyển xuống qua phải 
 			{
-				int distance_width = this->_right - ball_pos.x; // khoảng cách từ banh tới tường phải 
+				float distance_width = this->_right - ball_pos.x; // khoảng cách từ banh tới tường phải 
 				if (distance_width >= distance_height) // trường hợp ban di chuyển chéo màn hình mà không va chạm với tường 
 				{
 					if (pos < 0 || pos > 0 && distance_height > pos || pos == 0) // xét trường hợp thanh trượt nằm bên trái banh hoặc trường hợp thanh trượt nằm bên phải banh và khoảng cách từ banh tới tường dưới lớn hơn vị trí tương đối của thanh trượt hoặc vị trí của thanh trượt ngang với trái banh
@@ -630,17 +632,17 @@ float Pong::calculatePosBottom(float& dest_pos)
 				}
 				else // trường hợp banh di chuyển chéo màn hình có va chạm với tường
 				{
-					int distance = distance_height - distance_width; // do banh chỉ di chuyển theo gốc 45 độ nên khi lấy khoảng cách từ banh tới tường dưới trừ cho khoảng cách từ banh tới tường phải ta sẽ có được khoảng cách từ tường phải cho đến vị trí banh sẽ đáp xuống ở tường dưới 
-					int player_distance_to_right_wall = this->_right - this->_playerBottom->getPos().x; // khoảng cách từ thanh trượt tới tường phải 
+					float distance = distance_height - distance_width; // do banh chỉ di chuyển theo gốc 45 độ nên khi lấy khoảng cách từ banh tới tường dưới trừ cho khoảng cách từ banh tới tường phải ta sẽ có được khoảng cách từ tường phải cho đến vị trí banh sẽ đáp xuống ở tường dưới 
+					float player_distance_to_right_wall = this->_right - this->_playerBottom->getPos().x; // khoảng cách từ thanh trượt tới tường phải 
 					if ((pos < 0 && player_distance_to_right_wall > distance) || (pos > 0 && player_distance_to_right_wall > distance) || (pos == 0 && player_distance_to_right_wall > distance)) // xét trường hợp banh nằm bên trái hoặc bên phải hoặc bằng thanh trượt và khoảng cách từ thanh trượt tới tường phải lớn hơn khoảng cách từ tường phải tới vị trí banh đáp xuống
 					{
 						this->_playerBottom->setDir(PRIGHT); // thanh trượt di chuyển sang phải 
-						return this->_right - distance; // trả về độ rộng màn hình trừ cho khoảng cách từ tường phải tới vị trí đáp xuống của nó ở tường dưới 
+						return (float)this->_right - distance; // trả về độ rộng màn hình trừ cho khoảng cách từ tường phải tới vị trí đáp xuống của nó ở tường dưới 
 					}
 					if ((pos < 0 && distance >player_distance_to_right_wall) || (pos > 0 && distance > player_distance_to_right_wall) || (pos == 0 && distance > player_distance_to_right_wall)) // xét trường hợp banh nằm bên trái hoặc bên phải hoặc bằng thanh trượt và khoảng cách từ thanh trượt tới tường phải nhỏ hơn khoảng cách từ tường phải tới vị trí banh đáp xuống
 					{
 						this->_playerBottom->setDir(PLEFT); // thanh trượt di chuyển sang trái 
-						return this->_right - distance; // trả về độ rộng màn hình trừ cho khoảng cách từ tường phải tới vị trí đáp xuống của nó ở tường dưới 
+						return (float)this->_right - distance; // trả về độ rộng màn hình trừ cho khoảng cách từ tường phải tới vị trí đáp xuống của nó ở tường dưới 
 					}
 				}
 			}
@@ -708,11 +710,11 @@ float Pong::calculatePosTop(float& dest_pos)
 	}
 	if (dest_pos == 0 && ball_pos.y == this->_bot - 3 && (ball_dir == UP || ball_dir == UPLEFT || ball_dir == UPRIGHT)) // nếu vị trí cần chuyển tới là 0 , vị trí của banh đang là cách thanh trượt dưới 1 đơn vị và đang di chuyển lên thì thanh trượt bắt đầu tính toán vị trí cần tới mới 
 	{
-		int distance_height = ball_pos.y - this->_playerTop->getPos().y - 1; // khoảng cách từ banh tới biên đối diện ( tường trên )
-		int pos = this->_playerTop->getPos().x - ball_pos.x; // tính vị trị tương đối giữa thanh trượt và trái banh theo tọa độ x
+		float distance_height = ball_pos.y - this->_playerTop->getPos().y - 1; // khoảng cách từ banh tới biên đối diện ( tường trên )
+		float pos = this->_playerTop->getPos().x - ball_pos.x; // tính vị trị tương đối giữa thanh trượt và trái banh theo tọa độ x
 		if (ball_dir == UPLEFT) // trường hợp banh di chuyển lên qua trái
 		{
-			int distance_width = ball_pos.x - 1; // khoảng cách từ banh tới tường trái 
+			float distance_width = ball_pos.x - 1; // khoảng cách từ banh tới tường trái 
 			if (distance_width >= distance_height) // trường hợp banh di chuyển chéo màn hình mà không va chạm với tường 
 			{
 				if (pos > 0 || (pos < 0 && abs(pos) < distance_height) || pos == 0) // xét các vị trí thanh trượt năm bên phải banh hoặc thanh trượt nằm bên trái banh nhưng vị trí tượng đối của nó nhỏ hơn khoảng cách tới tường trên ( theo x - tức là di chuyển một khoảng x thì banh sẽ chạm tường trên )
@@ -728,7 +730,7 @@ float Pong::calculatePosTop(float& dest_pos)
 			}
 			else // trường hợp banh di chuyển chéo màn hình có va chạm với tường 
 			{
-				int distance = distance_height - distance_width; // do banh chỉ di chuyển theo gốc 45 độ nên khi lấy khoảng cách từ banh tới tường trên trừ cho khoảng cách từ banh tới tường trái ta sẽ có được khoảng cách từ tường trái cho đến vị trí banh sẽ đáp xuống ở tường trên
+				float distance = distance_height - distance_width; // do banh chỉ di chuyển theo gốc 45 độ nên khi lấy khoảng cách từ banh tới tường trên trừ cho khoảng cách từ banh tới tường trái ta sẽ có được khoảng cách từ tường trái cho đến vị trí banh sẽ đáp xuống ở tường trên
 				if ((pos < 0 && distance > this->_playerTop->getPos().x) || (pos > 0 && distance > this->_playerTop->getPos().x) || (pos == 0 && distance > this->_playerTop->getPos().x)) // xét trường hợp vị trí khi thanh trượt nằm bên trái hoặc bên phải hoặc ngang bằng với trái banh và khoảng cách từ tường trái cho đến vị trí đáp xuống ở tường trên của banh lớn hơn khoảng cách của thanh trượt tới tường trái 
 				{
 					this->_playerTop->setDir(PRIGHT);  // thanh trượt di chuyển sang phải 
@@ -745,7 +747,7 @@ float Pong::calculatePosTop(float& dest_pos)
 		{
 			if (ball_dir == UPRIGHT) // trường hợp banh di chuyển lên qua phải 
 			{
-				int distance_width = this->_right - ball_pos.x; // khoảng cách từ banh tới tường phải
+				float distance_width = this->_right - ball_pos.x; // khoảng cách từ banh tới tường phải
 				if (distance_width >= distance_height) // trường hợp ban di chuyển chéo màn hình mà không va chạm với tường 
 				{
 					if (pos < 0 || pos > 0 && distance_height > pos || pos == 0) // xét trường hợp thanh trượt nằm bên trái banh hoặc trường hợp thanh trượt nằm bên phải banh và khoảng cách từ banh tới tường trên lớn hơn vị trí tương đối của thanh trượt hoặc vị trí của thanh trượt ngang với trái banh
@@ -761,8 +763,8 @@ float Pong::calculatePosTop(float& dest_pos)
 				}
 				else // trường hợp banh di chuyển chéo màn hình có va chạm với tường
 				{
-					int distance = distance_height - distance_width; // do banh chỉ di chuyển theo gốc 45 độ nên khi lấy khoảng cách từ banh tới tường trên trừ cho khoảng cách từ banh tới tường phải ta sẽ có được khoảng cách từ tường phải cho đến vị trí banh sẽ đáp xuống ở tường trên
-					int player_distance_to_right_wall = this->_right - this->_playerTop->getPos().x; // khoảng cách từ thanh trượt tới tường phải 
+					float distance = distance_height - distance_width; // do banh chỉ di chuyển theo gốc 45 độ nên khi lấy khoảng cách từ banh tới tường trên trừ cho khoảng cách từ banh tới tường phải ta sẽ có được khoảng cách từ tường phải cho đến vị trí banh sẽ đáp xuống ở tường trên
+					float player_distance_to_right_wall = this->_right - this->_playerTop->getPos().x; // khoảng cách từ thanh trượt tới tường phải 
 					if ((pos < 0 && player_distance_to_right_wall > distance) || (pos > 0 && player_distance_to_right_wall > distance) || (pos == 0 && player_distance_to_right_wall > distance)) // xét trường hợp banh nằm bên trái hoặc bên phải hoặc bằng thanh trượt và khoảng cách từ thanh trượt tới tường phải lớn hơn khoảng cách từ tường phải tới vị trí banh đáp xuống
 					{
 						this->_playerTop->setDir(PRIGHT); // thanh trượt di chuyển sang phải 
