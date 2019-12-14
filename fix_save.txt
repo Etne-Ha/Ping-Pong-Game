@@ -1,0 +1,25 @@
+//Save game
+void Save(SDL_Window*& window, SDL_Renderer*& renderer, string name)
+{
+	ifstream file;
+	file.open("save\\dat.txt");
+	string str;
+	bool ktr = true;
+	while (!file.eof())
+	{
+		getline(file, str);
+		if (str.compare(name) == 0)
+		{
+			ktr = false;
+			break;
+		}
+	}
+	file.close();
+	if (ktr == true)
+	{
+		ofstream fileout;
+		fileout.open("save\\dat.txt", ios::app);
+		fileout << name << endl;
+		fileout.close();
+	}
+}
