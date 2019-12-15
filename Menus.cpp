@@ -531,7 +531,7 @@ int pre_start(SDL_Window * &window, SDL_Renderer * &renderer)
 						{
 						case 0:
 						{
-							Start_new(window, renderer, name_player, "");
+							Start_new(window, renderer, name_player, "1");
 							break;
 						}
 						case 1:
@@ -1072,7 +1072,8 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 		name = file_name;
 	}
 	else {
-		file.open("map//3.txt");
+		string str = "map\\" + file_name + ".txt";
+		file.open(str);
 		if (!file)
 		{
 			cout << "mo file loi" << endl;
