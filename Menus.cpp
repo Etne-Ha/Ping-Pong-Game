@@ -183,7 +183,7 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 						}
 						case 1:
 						{
-							score(window, renderer);
+							sc_score(window, renderer, -1);
 							break;
 						}
 						case 2:
@@ -340,7 +340,7 @@ string EnterPlayerName(SDL_Window*& window, SDL_Renderer*& renderer)
 					text = text.substr(0, text.length() - 1);
 				else if (e.type == SDL_TEXTINPUT && text.size() <= 15)
 					text += e.text.text;
-				const int n = text.length();
+				
 				temp = CreateSurfaceFromString(text.c_str(), font1, color);
 				texture = SDL_CreateTextureFromSurface(renderer, temp);
 				SDL_FreeSurface(temp);
@@ -442,10 +442,10 @@ int pre_start(SDL_Window * &window, SDL_Renderer * &renderer)
 	SDL_Texture* demo2 = NULL;
 	SDL_Rect d_rect1, d_rect2, d_desrect1, d_desrect2;
 
-	demo = IMG_Load("Image//demo1.bmp");
+	demo = IMG_Load("Image\\demo1.bmp");
 	demo1 = SDL_CreateTextureFromSurface(renderer, demo);
 
-	demo = IMG_Load("Image//demo2.bmp");
+	demo = IMG_Load("Image\\demo2.bmp");
 	demo2 = SDL_CreateTextureFromSurface(renderer, demo);
 
 	//Set toa do cua cac hinh demo
@@ -531,7 +531,7 @@ int pre_start(SDL_Window * &window, SDL_Renderer * &renderer)
 						{
 						case 0:
 						{
-							Start_new(window, renderer, name_player, "1");
+							Start_new(window, renderer, name_player, "1" ,0);
 							break;
 						}
 						case 1:
@@ -580,8 +580,12 @@ int pre_start(SDL_Window * &window, SDL_Renderer * &renderer)
 }
 
 //Bang Top nhung nguoi choi co so diem cao nhat
-void score(SDL_Window * &window, SDL_Renderer * &renderer)
+void sc_score(SDL_Window * &window, SDL_Renderer * &renderer, int score)
 {
+	//Mau khi cham va khong cham cua cac nut man hinh high score
+	SDL_Color color[2] = { { 246, 235, 0 }, { 255, 0, 0 } };
+
+
 	SDL_Surface* tempSurface = NULL;
 	SDL_Texture* texture = NULL;
 	SDL_Rect sourceRect;
@@ -593,6 +597,27 @@ void score(SDL_Window * &window, SDL_Renderer * &renderer)
 	font = TTF_OpenFont("font2.ttf", 50);
 	const int highScore = 10;
 	bool selected;
+	//Khoi tao diem cua ban (neu co se hien thi)
+	SDL_Surface* yourscore = NULL;
+	SDL_Texture* your_score = NULL;
+	SDL_Rect sc_rect, sc_desrect;
+
+	string urscore = "Your score: " + to_string(score);
+	yourscore = CreateSurfaceFromString(urscore.c_str(), font, color[1]);
+	your_score = SDL_CreateTextureFromSurface(renderer, yourscore);
+	SDL_FreeSurface(yourscore);
+
+	TTF_SizeText(font, urscore.c_str(), &sc_rect.w, &sc_rect.h);
+
+	sc_rect.x = 0;
+	sc_rect.y = 0;
+	
+	sc_desrect.x = 585 - sc_rect.w / 2;
+	sc_desrect.y = 648;
+	sc_desrect.w = sc_rect.w;
+	sc_desrect.h = sc_rect.h;
+
+
 	//Khoi tao ten cho cac nut man hinh high score
 	char menu[highScore][11];
 
@@ -607,9 +632,6 @@ void score(SDL_Window * &window, SDL_Renderer * &renderer)
 		fscanf(file, "%s[^\n]", menu[j]);
 	}
 	fclose(file);
-
-	//Mau khi cham va khong cham cua cac nut man hinh high score
-	SDL_Color color[2] = { { 246, 235, 0 }, { 255, 0, 0 } };
 
 	SDL_Surface* menus[highScore];
 	SDL_Surface* back_b;
@@ -758,6 +780,11 @@ void score(SDL_Window * &window, SDL_Renderer * &renderer)
 		// copy a portion of the texture to the current rendering target.
 		SDL_RenderCopy(renderer, texture, &sourceRect, &desRect);
 
+		//Chen diem cua ban neu co
+		if (score != -1)
+		{
+			SDL_RenderCopy(renderer, your_score, &sc_rect, &sc_desrect);
+		}
 
 		//Chen cac nut vao man hinh
 		for (int i = 0; i < highScore; i++)
@@ -804,7 +831,7 @@ void load(SDL_Window * &window, SDL_Renderer * &renderer)
 	//Khung nut Back
 	const char* back = "Back";
 	TTF_Font* font1;
-	font1 = TTF_OpenFont("inputtext", 50);
+	font1 = TTF_OpenFont("inputext.ttf", 50);
 	TTF_Font* font;
 	font = TTF_OpenFont("font2.ttf", 50);
 	SDL_Surface* temp;
@@ -919,7 +946,7 @@ void load(SDL_Window * &window, SDL_Renderer * &renderer)
 					if (x >= desrect[i].x && x <= desrect[i].x + desrect[i].w && y >= desrect[i].y && y <= desrect[i].y + desrect[i].h)
 					{
 						SDL_StopTextInput();
-						return Start_new(window, renderer, "", data[i]);
+						return Start_new(window, renderer, "", data[i], 0);
 					}
 				}
 				break;
@@ -987,7 +1014,7 @@ void load(SDL_Window * &window, SDL_Renderer * &renderer)
 				if (e.type == SDL_KEYDOWN && (e.key.keysym.sym == SDLK_KP_ENTER || e.key.keysym.sym == SDLK_RETURN) && text.length() > 0)
 				{
 					SDL_StopTextInput();
-					return Start_new(window, renderer, "", text);
+					return Start_new(window, renderer, "", text,0);
 				}
 
 				if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_BACKSPACE && text.length() > 0)
@@ -995,12 +1022,9 @@ void load(SDL_Window * &window, SDL_Renderer * &renderer)
 				else if (e.type == SDL_TEXTINPUT && text.size() <= 15)
 					text += e.text.text;
 
-				system("cls");
-				cout << text << endl;
-				SDL_FreeSurface(temp_text);
 				temp_text = CreateSurfaceFromString(text.c_str(), font1, color[0]);
 				texture_text = SDL_CreateTextureFromSurface(renderer, temp_text);
-
+				SDL_FreeSurface(temp_text);
 				TTF_SizeText(font1, text.c_str(), &pos.w, &pos.h);
 
 				despos.x = 600 - pos.w / 2;
@@ -1033,8 +1057,10 @@ void exit(SDL_Window*& window, SDL_Renderer*& renderer)
 }
 
 //Choi game the loai moi
-void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string file_name)
+void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string file_name, int score)
 {
+	const int h[8] = { 0, 1, -1, 0, -1, 1, 1, -1 };
+	const int k[8] = { -1, 0, 0, 1, -1, -1, 1, 1 };
 	int _top = 140;
 	int _bot = 700;
 	int _left = 440;
@@ -1047,13 +1073,16 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 
 
 	//Lay map ban do
+	Object listObject[11][17];
 	const int numb_obj = 160;
+	int life = 3;
 	int ox[numb_obj];
 	int oy[numb_obj];
 	int key[numb_obj];
+	p2.SetScore(score);
+	int last_score = -1;
 	int numb = 0;
-	int score = 0;
-	int last_score = 0;
+	int numb_x = 0;
 	ifstream file;
 	if (name.compare("") == 0)
 	{
@@ -1064,9 +1093,14 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 			cout << "mo file loi" << endl;
 		}
 		file >> score;
+		p2.SetScore(score);
+		file >> life;
+		file >> file_name;
 		while (!file.eof())
 		{
 			file >> ox[numb] >> oy[numb] >> key[numb];
+			if (key[numb] != 3)
+				numb_x++;
 			numb++;
 		}
 		name = file_name;
@@ -1081,19 +1115,22 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 		while (!file.eof())
 		{
 			file >> ox[numb] >> oy[numb] >> key[numb];
+			if (key[numb] != 3)
+				numb_x++;
 			numb++;
 		}
 	}
 
 	//Bo dong cuoi cung trong file map
 	numb--;
+	numb_x--;
+	cout << numb <<  endl<<numb_x;
 	file.close();
 
 	//lay gia tri toa do con tro
 	int x, y;
 
 	//Creat object from file
-	Object listObject[160];
 	SDL_Surface* obj[3];
 	obj[0] = IMG_Load("init\\obj_1.bmp");
 	obj[1] = IMG_Load("init\\obj_2.bmp");
@@ -1115,7 +1152,10 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 		keyRect[i].w = rect[i].w;
 		keyRect[i].h = rect[i].h;
 
-		listObject[i].Get_Object(keyRect[i].x, keyRect[i].y, keyRect[i].w, keyRect[i].h, key[i]);
+		int dx = ox[i] / 40;
+		int dy = oy[i] / 20;
+
+		listObject[dx][dy].Get_Object(keyRect[i].x, keyRect[i].y, keyRect[i].w, keyRect[i].h, key[i]);
 		
 	}
 
@@ -1178,6 +1218,7 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 
 	//Phan chuong trinh chinh
 
+	
 	string score_text="100";
 	SDL_Event e;
 	int selected =0;
@@ -1244,11 +1285,14 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 					string str = "save\\" + name + ".txt";
 					file.open(str);
 					file << score << endl;
-					for (int i = 0; i < numb; i++)
+					file << life << endl;
+					file << file_name << endl;
+					for (int i = 0; i < 11; i++)
 					{
-						if (listObject[i].getKey() != 0)
+						for (int j = 0; j < 17; j++)
+						if (listObject[i][j].getKey() != 0)
 						{
-							file << ox[i] << "	" << oy[i] << "	" << key[i] << endl;
+							file << i * 40 << "	" << j * 20 << "	" << listObject[i][j].getKey() << endl;
 						}
 					}
 
@@ -1313,6 +1357,8 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 				break;
 			}
 			}
+			if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_ESCAPE)
+				return;
 		}
 		
 
@@ -1321,7 +1367,9 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 		//Chen cac object vao man hinh
 		for (int i = 0; i < numb; i++)
 		{
-			if (listObject[i].getKey() != DEAD)
+			int _x = int(ox[i] / 40);
+			int _y = int(oy[i] / 20);
+			if (listObject[_x][_y].getKey() != DEAD)
 			{
 				SDL_RenderCopy(renderer, object[i], &rect[i], &keyRect[i]);
 			}
@@ -1331,6 +1379,9 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 		//xu li di chuyen cua thanh truot
 		_playerBottom->move(); // di chuyển thanh truot
 		_playerBottom->draw(renderer); // vẽ thanh truot
+
+		if (_ball->getPos().x<440 || _ball->getPos().x>850)
+			_ball->impactWall2(_top, _bot, _left, _right);
 
 		if (_ball->impactBottom(_playerBottom)) // kiểm tra va chạm với thanh trượt dưới 
 		{
@@ -1342,20 +1393,42 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 				_ball->SetVY(_ball->VY() * 110 / 100);
 			}
 		}
-		else
+		
+		_ball->impactWall2(_top, _bot, _left, _right); // kiểm tra va chạm với wall
+	
+		
+		
+
+		//Kiem tra va cham voi cac object
+		if ((_ball->getPos().y < 460) && (_ball->getPos().x>440) && (_ball->getPos().x < 850))
 		{
-			if (_ball->impactWall2(_top, _bot, _left, _right)) // kiểm tra va chạm với wall
+			int _x = int((_ball->getPos().x - 440) / 40);
+			int _y = int((_ball->getPos().y - 140) / 20);
+			for (int i = 0; i < 8; i++)
 			{
+				if ((listObject[_x + h[i]][_y + k[i]].getKey() != DEAD) && (listObject[_x + h[i]][_y + k[i]].Collide(_ball) == true))
+				{
+					listObject[_x + h[i]][_y + k[i]].AfterCollide(_ball, _playerBottom);
+					if (listObject[_x + h[i]][_y + k[i]].getKey() == DEAD)
+					{
+						cout << numb_x << endl;
+						numb_x--;
+					}
+					break;
+
+				}
 			}
 		}
 
-		for (int i = 0; i < numb; i++)
+		/*for (int i = 0; i < numb; i++)
 		{
 			if (listObject[i].Collide(_ball) == true)
 			{
 				listObject[i].AfterCollide(_ball, _playerBottom);
+
 			}
-		}
+		}*/
+
 		score = _playerBottom->Score();
 		if (score != last_score)
 		{
@@ -1371,13 +1444,54 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 			sc_desrect.w = sc_rect.w;
 			sc_desrect.h = sc_rect.h;
 		}
-
+	
 		SDL_RenderCopy(renderer, text, &sc_rect, &sc_desrect);
+
 		_ball->move(); //di chuyen bong
 		_ball->draw(renderer); //ve bong
 
 		//Update man hinh
 		SDL_RenderPresent(renderer);
+
+		if (numb_x == 0)
+		{
+			switch (stoi(file_name))
+			{
+			case 1:
+			{
+				return Start_new(window, renderer, name, "2", p2.Score());
+			}
+			case 2:
+			{
+				return Start_new(window, renderer, name, "3", p2.Score());
+			}
+			case 3:
+			{
+				return Start_new(window, renderer, name, "4", p2.Score());
+			}
+			default:
+				return sc_score(window, renderer, p2.Score());
+			}
+		}
+			
+
+		if (_ball->getPos().y + _ball->R() >= _bot)
+		{
+			if (life > 0)
+			{
+				life--;
+				_ball->reset();
+				p2.reset();
+				p2.SetScore(score);
+			}
+			else
+			{
+				Highscore(name, p2.Score());
+				sc_score(window, renderer, p2.Score());
+				return Start_new(window, renderer, name, "1", 0);
+			}
+		}
+			
 	}
 }
 
@@ -1410,6 +1524,44 @@ void Save(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 		ofstream fileout;
 		fileout.open("save\\dat.txt", ios::app);
 		fileout << name << endl;
+		fileout.close();
+	}
+}
+
+void Highscore(string name, int score)
+{
+	ifstream file;
+	string str[5];
+	int data[5];
+	int vtri = 0;
+	int index = 10;
+	file.open("HighScore.txt");
+	while (!file.eof())
+	{
+		file >> str[vtri];
+		file >> data[vtri];
+		if (data[vtri] < score && index == 10)
+		{
+			index = vtri;
+		}
+		vtri++;
+		if (vtri == 5)
+			break;
+	}
+	file.close();
+	if (index < 4)
+	{
+		ofstream fileout;
+		fileout.open("HighScore.txt");
+		for (int i = 0; i < 5; i++)
+		{
+			if (i!=index)
+				fileout << str[i] << "	" << data[i] << endl;
+			else
+			{
+				fileout << name << "	" << score << endl;
+			}
+		}
 		fileout.close();
 	}
 }
