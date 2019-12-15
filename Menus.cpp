@@ -1,4 +1,4 @@
-#include "Menus.h"
+﻿#include "Menus.h"
 //Ham tao Surface dua tren mot chuoi String
 SDL_Surface* CreateSurfaceFromString(const char* str, TTF_Font* font, SDL_Color color)
 {
@@ -64,8 +64,8 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 	SDL_Rect desRect;
 
 	int x, y;
-	TTF_Font* font;
-	font = TTF_OpenFont("test.ttf", 50);
+	TTF_Font* font=NULL;
+	font = TTF_OpenFont("font2.ttf", 50);
 	const int NUMMENU = 4;
 	bool selected[NUMMENU] = {0, 0, 0, 0 };
 	//Khoi tao ten cho cac nut man hinh Menu
@@ -74,7 +74,7 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 	SDL_Rect pos[NUMMENU];
 
 	//Mau khi cham va khong cham cua cac nut man hinh Menu
-	SDL_Color color[2] = { { 255, 255, 255 }, { 255, 0, 0 } };
+	SDL_Color color[2] = { { 246,235,0 }, { 255, 0, 0 } };
 
 	for (int i = 0; i < NUMMENU; i++)
 	{
@@ -193,7 +193,7 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 						}
 						case 2:
 						{
-							//load(window, renderer);
+							load(window, renderer);
 							break;
 						}
 						case 3:
@@ -244,8 +244,10 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 string EnterPlayerName(SDL_Window*& window, SDL_Renderer*& renderer)
 {
 	TTF_Font* font;
-	font = TTF_OpenFont("test.ttf", 50);
-	SDL_Color color = { 255, 255, 255 };
+	font = TTF_OpenFont("font2.ttf", 50);
+	TTF_Font* font1;
+	font1 = TTF_OpenFont("inputext.ttf", 50);
+	SDL_Color color = { 246, 235, 0 };
 
 	//Background cua man hinh
 	SDL_Surface* backgr = NULL;
@@ -344,10 +346,10 @@ string EnterPlayerName(SDL_Window*& window, SDL_Renderer*& renderer)
 				else if (e.type == SDL_TEXTINPUT && text.size() <= 15)
 					text += e.text.text;
 				const int n = text.length();
-				temp = CreateSurfaceFromString(text.c_str(), font, color);
+				temp = CreateSurfaceFromString(text.c_str(), font1, color);
 				texture = SDL_CreateTextureFromSurface(renderer, temp);
 				SDL_FreeSurface(temp);
-				TTF_SizeText(font, text.c_str(), &pos.w, &pos.h);
+				TTF_SizeText(font1, text.c_str(), &pos.w, &pos.h);
 
 				despos.x = 600 - pos.w / 2;
 
@@ -380,7 +382,7 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 
 	int x, y;
 	TTF_Font* font;
-	font = TTF_OpenFont("test.ttf", 50);
+	font = TTF_OpenFont("font2.ttf", 50);
 	const int NUMMENU = 3;
 	bool selected[NUMMENU] = { 0, 0, 0};
 	//Khoi tao ten cho cac nut man hinh Menu
@@ -389,7 +391,7 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 	SDL_Rect pos[NUMMENU];
 
 	//Mau khi cham va khong cham cua cac nut man hinh Menu
-	SDL_Color color[2] = { { 255, 255, 255 }, { 255, 0, 0 } };
+	SDL_Color color[2] = { { 246, 235, 0 }, { 255, 0, 0 } };
 
 	for (int i = 0; i < NUMMENU; i++)
 	{
@@ -508,8 +510,6 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 							menus[i] = TTF_RenderText_Solid(font, menu[i], color[1]);
 							Message[i] = SDL_CreateTextureFromSurface(renderer, menus[i]);
 						}
-						
-						
 					}
 					else
 					{
@@ -536,12 +536,12 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 						{
 						case 0:
 						{
-							Start_new(window, renderer, name_player);
+							Start_new(window, renderer, name_player, "");
 							break;
 						}
 						case 1:
 						{
-							//Start_classic();
+							Start_classic(window, renderer);
 							break;
 						}
 						case 2:
@@ -591,11 +591,11 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 	SDL_Texture* texture = NULL;
 	SDL_Rect sourceRect;
 	SDL_Rect desRect;
-	char* back = "Back";
+	const char* back = "Back";
 
 	int x, y;
 	TTF_Font* font;
-	font = TTF_OpenFont("test.ttf", 50);
+	font = TTF_OpenFont("font2.ttf", 50);
 	const int highScore = 10;
 	bool selected;
 	//Khoi tao ten cho cac nut man hinh high score
@@ -614,11 +614,12 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 	fclose(file);
 
 	//Mau khi cham va khong cham cua cac nut man hinh high score
-	SDL_Color color[2] = { { 255, 255, 255 }, { 255, 0, 0 } };
+	SDL_Color color[2] = { { 246, 235, 0 }, { 255, 0, 0 } };
 	
 	SDL_Surface* menus[highScore];
 	SDL_Surface* back_b;
 	SDL_Rect pos[highScore];
+
 	
 
 	back_b = TTF_RenderText_Solid(font, back, color[0]);
@@ -779,7 +780,257 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 }
 
 //Bang load Game da save
-void load(SDL_Window*& window, SDL_Renderer*& renderer);
+void load(SDL_Window*& window, SDL_Renderer*& renderer)
+{
+	SDL_Color color[2] = { { 246, 235, 0 }, { 225, 0, 0 } };
+	SDL_Surface* tempSurface=NULL;
+	SDL_Texture* texture=NULL;
+	SDL_Rect sourceRect, desRect;
+
+	//Background cua man hinh high score
+	//create a tempSurface
+	tempSurface = IMG_Load("Image\\loadbackground.jpg");
+	//create a texutre from surface
+	texture = SDL_CreateTextureFromSurface(renderer, tempSurface);
+	//free surface
+	SDL_FreeSurface(tempSurface);
+	SDL_QueryTexture(texture, NULL, NULL, &sourceRect.w, &sourceRect.h);
+
+	sourceRect.x = 0;
+	sourceRect.y = 0;
+	sourceRect.w = 1257;
+	sourceRect.h = 730;
+
+	desRect.x = 0;
+	desRect.y = 0;
+	desRect.w = sourceRect.w;
+	desRect.h = sourceRect.h;
+
+	//Khung nut Back
+	const char* back = "Back";
+	TTF_Font* font1;
+	font1 = TTF_OpenFont("inputtext", 50);
+	TTF_Font* font;
+	font = TTF_OpenFont("font2.ttf", 50);
+	SDL_Surface* temp;
+	SDL_Texture* b_back;
+	SDL_Rect b_pos;
+	SDL_Rect b_despos;
+
+	temp = TTF_RenderText_Solid(font, back, color[0]);
+	b_back = SDL_CreateTextureFromSurface(renderer, temp);
+	SDL_FreeSurface(temp);
+
+	TTF_SizeText(font, back, &b_pos.w, &b_pos.h);
+	b_pos.x = 0;
+	b_pos.y = 0;
+
+	b_despos.x = 100 - b_pos.w / 2;
+	b_despos.y = 600;
+
+	b_despos.w = b_pos.w;
+	b_despos.h = b_pos.h;
+
+	//Get file "save\\dat.txt" de lay thong tin cac file da save
+	//Toi da 4 file moi nhat
+	string data[5];
+	ifstream file;
+	string str;
+	int i = 0;
+	const int numb = 4;
+	int k = 0;
+	file.open("save\\dat.txt");
+	while (!file.eof())
+	{
+		getline(file, str);
+		if (str.compare("") == 0)
+			break;
+		data[i] = str;
+		i++;
+		i = i % 4;
+		if (k < 4)
+			k++;
+	}
+	file.close();
+	//Tao k( k<= 4)  file va hien thi ra man hinh
+	SDL_Surface* temp_file_name[numb];
+	SDL_Texture* file_name[numb];
+	SDL_Rect rect[numb], desrect[numb];
+	for (int i = 0; i < k; i++)
+	{
+		temp_file_name[i] = CreateSurfaceFromString(data[i].c_str(), font, color[0]);
+		file_name[i] = SDL_CreateTextureFromSurface(renderer, temp_file_name[i]);
+
+		TTF_SizeText(font, data[i].c_str(), &rect[i].w, &rect[i].h);
+
+		rect[i].x = 0;
+		rect[i].y = 0;
+
+		desrect[i].x = 350 + rect[0].w / 2;
+		desrect[i].y = 180 + i * 95;
+		desrect[i].w = rect[i].w;
+		desrect[i].h = rect[i].h;
+	}
+	
+	string text = "";
+	SDL_Rect pos, despos;
+	SDL_Surface* temp_text;
+	SDL_Texture* texture_text;
+
+	temp_text = CreateSurfaceFromString(text.c_str(), font, color[0]);
+	texture_text = SDL_CreateTextureFromSurface(renderer, temp_text);
+	TTF_SizeText(font, text.c_str(), &pos.w, &pos.h);
+	
+	pos.x = 0;
+	pos.y = 0;
+
+	despos.x = 600 - pos.w / 2;
+	despos.y = 550;
+	despos.w = pos.w;
+	despos.h = pos.h;
+
+	int selected[numb];
+	int b_selected;
+
+	//Toa do cua con tro
+	int x = 0;
+	int y = 0;
+
+
+	SDL_Event e;
+	SDL_StartTextInput();
+	
+	while (true)
+	{
+		while (SDL_PollEvent(&e) != 0)
+		{
+			//Getting the quit and  the keyboard events
+			switch (e.type)
+			{
+			case SDL_QUIT:
+			{
+				SDL_Quit();
+			}
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				x = e.motion.x;
+				y = e.motion.y;
+				if (x >= b_despos.x && x <= b_despos.x + b_despos.w && y >= b_despos.y && y <= b_despos.y + b_despos.h)
+				{
+					SDL_StopTextInput();
+					cout << "back" << endl;
+					return;
+				}
+				for (int i = 0; i < k; i += 1) {
+					if (x >= desrect[i].x && x <= desrect[i].x + desrect[i].w && y >= desrect[i].y && y <= desrect[i].y + desrect[i].h)
+					{
+						SDL_StopTextInput();
+						return Start_new(window, renderer, "", data[i]);
+					}
+				}
+				break;
+			}
+			case SDL_MOUSEMOTION:
+			{
+				x = e.motion.x;
+				y = e.motion.y;
+
+				if (x >= b_despos.x && x <= b_despos.x + b_despos.w && y >= b_despos.y && y <= b_despos.y + b_despos.h)
+				{
+					if (!b_selected)
+					{
+						b_selected = 1;
+						SDL_FreeSurface(temp);
+						temp = TTF_RenderText_Solid(font, back, color[1]);
+						b_back = SDL_CreateTextureFromSurface(renderer, temp);
+					}
+				}
+				else
+				{
+					if (b_selected)
+					{
+						b_selected = 0;
+						SDL_FreeSurface(temp);
+						temp = TTF_RenderText_Solid(font, back, color[0]);
+						b_back = SDL_CreateTextureFromSurface(renderer, temp);
+					}
+				}
+
+				for (int i = 0; i < k; i++)
+				{
+					if (x >= desrect[i].x && x <= desrect[i].x + desrect[i].w && y >= desrect[i].y && y <= desrect[i].y + desrect[i].h)
+					{
+						if (!selected[i])
+						{
+							selected[i] = 1;
+							SDL_FreeSurface(temp_file_name[i]);
+							temp_file_name[i] = CreateSurfaceFromString(data[i].c_str(), font, color[1]);
+							file_name[i] = SDL_CreateTextureFromSurface(renderer, temp_file_name[i]);
+						}
+					}
+					else
+					{
+						if (selected[i])
+						{
+							selected[i] = 0;
+							SDL_FreeSurface(temp_file_name[i]);
+							temp_file_name[i] = CreateSurfaceFromString(data[i].c_str(), font, color[0]);
+							file_name[i] = SDL_CreateTextureFromSurface(renderer, temp_file_name[i]);
+						}
+					}
+				}
+				break;
+			}
+			default:
+			{
+				break;
+			}
+			}
+
+
+			if (e.type == SDL_TEXTINPUT || e.type == SDL_KEYDOWN)
+			{
+				if (e.type == SDL_KEYDOWN && (e.key.keysym.sym == SDLK_KP_ENTER || e.key.keysym.sym == SDLK_RETURN) && text.length() > 0)
+				{
+					SDL_StopTextInput();
+					return Start_new(window, renderer, "", text);
+				}
+
+				if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_BACKSPACE &&text.length() > 0)
+					text = text.substr(0, text.length() - 1);
+				else if (e.type == SDL_TEXTINPUT && text.size() <= 15)
+					text += e.text.text;
+
+				system("cls");
+				cout << text << endl;
+				SDL_FreeSurface(temp_text);
+				temp_text = CreateSurfaceFromString(text.c_str(), font1, color[0]);
+				texture_text = SDL_CreateTextureFromSurface(renderer, temp_text);
+				
+				TTF_SizeText(font1, text.c_str(), &pos.w, &pos.h);
+
+				despos.x = 600 - pos.w / 2;
+
+				despos.w = pos.w;
+				despos.h = pos.h;	
+			}
+		}
+
+		SDL_RenderCopy(renderer, texture, &sourceRect, &desRect);
+
+		SDL_RenderCopy(renderer, texture_text, &pos, &despos);
+
+		for (int i = 0; i < k; i++)
+			SDL_RenderCopy(renderer, file_name[i], &rect[i], &desrect[i]);
+
+		SDL_RenderCopy(renderer, b_back, &b_pos, &b_despos);
+		SDL_RenderPresent(renderer);
+
+	}
+
+	SDL_StopTextInput();
+
+}
 
 //Ham thoat game
 void exit(SDL_Window*& window, SDL_Renderer*& renderer)
@@ -788,34 +1039,55 @@ void exit(SDL_Window*& window, SDL_Renderer*& renderer)
 }
 
 //Choi game the loai moi
-void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name)
+void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string file_name)
 {
+	//Lay map ban do
 	const int numb_obj = 160;
 	int ox[numb_obj];
 	int oy[numb_obj];
 	int key[numb_obj];
 	int numb = 0;
+
+	int score = 0;
+	int last_score = 0;
 	ifstream file;
-	file.open("map//4.txt");
-	if (!file)
+	if (name.compare("") == 0)
 	{
-		cout << "mo file loi" << endl;
+		string str = "save\\" + file_name + ".txt";
+		file.open(str);
+		if (!file)
+		{
+			cout << "mo file loi" << endl;
+		}
+		file >> score;
+		while (!file.eof())
+		{
+			file >> ox[numb] >> oy[numb] >> key[numb];
+			numb++;
+		}
+		name = file_name;
 	}
-	while (!file.eof())
-	{
-		file >> ox[numb] >> oy[numb] >> key[numb];
-		numb++;
+	else{
+		file.open("map//4.txt");
+		if (!file)
+		{
+			cout << "mo file loi" << endl;
+		}
+		while (!file.eof())
+		{
+			file >> ox[numb] >> oy[numb] >> key[numb];
+			numb++;
+		}
 	}
+	
+
 	//Bo dong cuoi cung trong file map
 	numb--;
 	file.close();
 
-	SDL_Surface* tempSurface = NULL;
-	SDL_Texture* texture = NULL;
-	SDL_Rect sourceRect;
-	SDL_Rect desRect;
-
+	//lay gia tri toa do con tro
 	int x, y;
+
 	//Creat object from file
 	SDL_Surface* obj[3];
 	obj[0] = IMG_Load("init\\obj_1.bmp");
@@ -839,7 +1111,7 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 		keyRect[i].h = rect[i].h;
 	}
 
-	//Save Game
+	//Nut Save Game phan ingame
 	SDL_Surface* s;
 	SDL_Texture* save;
 	SDL_Color color[2] = { { 255, 255, 255 }, { 255, 0, 0 } };
@@ -847,7 +1119,7 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 	SDL_Rect s_rect;
 	SDL_Rect s_desrect;
 	TTF_Font* font;
-	font = TTF_OpenFont("test.ttf" , 50);
+	font = TTF_OpenFont("font2.ttf" , 50);
 
 	s = TTF_RenderText_Solid(font, sa, color[0]);
 	save = SDL_CreateTextureFromSurface(renderer, s);
@@ -863,8 +1135,8 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 	s_desrect.h = s_rect.h;
 
 	//Khung diem so
-	SDL_Surface* temp;
-	SDL_Texture* text;
+	SDL_Surface* temp = NULL;
+	SDL_Texture* text = NULL;
 	SDL_Rect sc_rect, sc_desrect;
 
 	sc_rect.x = 0;
@@ -872,7 +1144,11 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 
 	sc_desrect.y = 150;
 
-	//Background cua man hinh Menu
+	//Background cua man hinh Menu.
+	SDL_Surface* tempSurface = NULL;
+	SDL_Texture* texture = NULL;
+	SDL_Rect sourceRect;
+	SDL_Rect desRect;
 	//create a tempSurface
 	tempSurface = IMG_Load("Image\\ingame.bmp");
 	//create a texutre from surface
@@ -891,9 +1167,8 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 	desRect.w = sourceRect.w;
 	desRect.h = sourceRect.h;
 
-	int score = 0;
-	int last_score = 0;
-	string score_text="100";
+	
+	string score_text="0";
 	SDL_Event e;
 	int selected =0;
 	while (true)
@@ -946,6 +1221,7 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 					ofstream file;
 					string str = "save\\" + name + ".txt";
 					file.open(str);
+					file << score << endl;
 					for (int i = 0; i < numb; i++)
 					{
 						if (key[i] != 0)
@@ -1046,12 +1322,16 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 }
 
 //Choi game the loai co dien dooi khang 1v1
-void Start_classic();
+void Start_classic(SDL_Window*& window, SDL_Renderer*& renderer)
+{
+	Pong Game(140, 140 + 560, 440, 850, PLAYING); // tạo một vật thể thuộc lớp game pong với chiều rộng == 40 và chiều cao == 30 với trạng thái vào game là INTRO 
+	Game.runGame(window, renderer); // bắt đầu chạy game
+}
 
-//Khung save game
+//Save game
 void Save(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 {
-	fstream file;
+	ifstream file;
 	file.open("save\\dat.txt");
 	string str;
 	bool ktr = true;
@@ -1064,10 +1344,12 @@ void Save(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 			break;
 		}
 	}
+	file.close();
 	if (ktr == true)
 	{
-		file << name << endl;
+		ofstream fileout;
+		fileout.open("save\\dat.txt", ios::app);
+		fileout << name << endl;
+		fileout.close();
 	}
-
-	file.close();
 }
