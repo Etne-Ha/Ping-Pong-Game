@@ -43,13 +43,13 @@ bool Object::Collide(Ball* _ball)
 		else if (_ball->getPos().x < _x && _ball->getPos().x > _x - _ball->R()
 			&& _ball->getPos().y - _ball->R() <= _y + _h && _ball->getPos().y - _ball->R() >= _y + _h - epsilon) // rìa trái thanh trượt
 		{
-			_ball->setDir(DOWNLEFT); // banh sẽ đi xuong sang trái 
+			_ball->setDir(DOWN); // banh sẽ đi xuong sang trái 
 			return true; // trả về true vì đã diễn ra va chạm
 		}
 		else if (_ball->getPos().x > _x + _w && _ball->getPos().x < _x + _w + _ball->R()
 			&& _ball->getPos().y - _ball->R() <= _y + _h && _ball->getPos().y - _ball->R() >= _y + _h - epsilon) // rìa phải thanh trượt 
 		{
-			_ball->setDir(DOWNRIGHT); // banh sẽ đi xuong sang phải
+			_ball->setDir(DOWN); // banh sẽ đi xuong sang phải
 			return true; // trả về true vì đã diễn ra va chạm
 		}
 		break;
@@ -67,7 +67,7 @@ bool Object::Collide(Ball* _ball)
 		else if (_ball->getPos().x > _x + _w - epsilon && _ball->getPos().x <= _x + _w + _ball->R()
 			&& _ball->getPos().y - _ball->R() <= _y + _h && _ball->getPos().y - _ball->R() >= _y + _h - epsilon)
 		{
-			_ball->setDir(DOWNRIGHT); // banh di xuong sang phai
+			_ball->setDir(UPRIGHT); // banh di xuong sang phai
 			return true; // trả về true vì đã diễn ra va chạm
 		}
 		//cham be ngang thanh truot
@@ -92,7 +92,7 @@ bool Object::Collide(Ball* _ball)
 		else if (_ball->getPos().x > _x - _ball->R() && _ball->getPos().x <= _x + epsilon
 			&& _ball->getPos().y - _ball->R() <= _y + _h && _ball->getPos().y - _ball->R() >= _y + _h - epsilon)
 		{
-			_ball->setDir(DOWNLEFT); // banh di xuong goc trai
+			_ball->setDir(UPLEFT); // banh di xuong goc trai
 			return true; // trả về true vì đã diễn ra va chạm
 		}
 		//cham be ngang thanh truot
@@ -115,13 +115,13 @@ bool Object::Collide(Ball* _ball)
 		else if (_ball->getPos().x < _x && _ball->getPos().x > _x - _ball->R()
 			&& _ball->getPos().y + _ball->R() >= _y && _ball->getPos().y + _ball->R() <= _y + epsilon) // rìa trái thanh trượt
 		{
-			_ball->setDir(UPLEFT); // banh sẽ đi len sang trái 
+			_ball->setDir(UP); // banh sẽ đi len sang trái 
 			return true; // trả về true vì đã diễn ra va chạm
 		}
 		else if (_ball->getPos().x > _x + _w && _ball->getPos().x < _x + _w + _ball->R()
 			&& _ball->getPos().y + _ball->R() >= _y && _ball->getPos().y + _ball->R() <= _y + epsilon) // rìa phải thanh trượt 
 		{
-			_ball->setDir(UPRIGHT); // banh sẽ đi lên sang phải
+			_ball->setDir(UP); // banh sẽ đi lên sang phải
 			return true; // trả về true vì đã diễn ra va chạm
 		}
 		break;
@@ -139,7 +139,7 @@ bool Object::Collide(Ball* _ball)
 		else if (_ball->getPos().x > _x + _w - epsilon && _ball->getPos().x <= _x + _w + _ball->R()
 			&& _ball->getPos().y + _ball->R() >= _y && _ball->getPos().y + _ball->R() <= _y + epsilon)
 		{
-			_ball->setDir(UPRIGHT); // banh di len sang phai
+			_ball->setDir(DOWNRIGHT); // banh di len sang phai
 			return true; // trả về true vì đã diễn ra va chạm
 		}
 		//cham be ngang thanh truot ben phai
@@ -164,7 +164,7 @@ bool Object::Collide(Ball* _ball)
 		else if (_ball->getPos().x > _x - _ball->R() && _ball->getPos().x <= _x + epsilon
 			&& _ball->getPos().y + _ball->R() >= _y && _ball->getPos().y + _ball->R() <= _y + epsilon)
 		{
-			_ball->setDir(UPLEFT); // banh di len goc trai
+			_ball->setDir(DOWNLEFT); // banh di len goc trai
 			return true; // trả về true vì đã diễn ra va chạm
 		}
 		//cham be ngang thanh truot
