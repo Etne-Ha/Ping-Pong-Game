@@ -1,10 +1,5 @@
 ﻿#include "Menus.h"
-//Ham tao Surface dua tren mot chuoi String
-SDL_Surface* CreateSurfaceFromString(const char* str, TTF_Font* font, SDL_Color color)
-{
-	SDL_Surface* surface = TTF_RenderText_Solid(font, str, color);
-	return surface;
-}
+
 
 //Khoi tao cac gia tri dau cho viec tao man hinh choi game
 //Cau hinh 1257, 730
@@ -64,10 +59,10 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 	SDL_Rect desRect;
 
 	int x, y;
-	TTF_Font* font=NULL;
+	TTF_Font* font = NULL;
 	font = TTF_OpenFont("font2.ttf", 50);
 	const int NUMMENU = 4;
-	bool selected[NUMMENU] = {0, 0, 0, 0 };
+	bool selected[NUMMENU] = { 0, 0, 0, 0 };
 	//Khoi tao ten cho cac nut man hinh Menu
 	const char* menu[NUMMENU] = { "Start", "Score", "Load", "Exit" };
 	SDL_Surface* menus[NUMMENU];
@@ -130,7 +125,7 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 	//main loop
 	SDL_Event e;
 	int isRunning = -1;
-	while (isRunning==-1)
+	while (isRunning == -1)
 	{
 		// clear the window to black
 		SDL_RenderClear(renderer);
@@ -139,7 +134,7 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 		{
 			switch (e.type)
 			{
-			//User - requested quit
+				//User - requested quit
 			case SDL_QUIT:
 			{
 				isRunning = 3;
@@ -234,8 +229,8 @@ int Menu(SDL_Window*& window, SDL_Renderer*& renderer)
 	SDL_FreeSurface(menus[1]);
 	SDL_FreeSurface(menus[2]);
 	SDL_FreeSurface(menus[3]);
-	
-	
+
+
 
 	return isRunning;
 }
@@ -271,7 +266,7 @@ string EnterPlayerName(SDL_Window*& window, SDL_Renderer*& renderer)
 	desRect.h = sourceRect.h;
 
 	//Nut Back 
-	SDL_Surface* bc=NULL;
+	SDL_Surface* bc = NULL;
 	SDL_Texture* back = NULL;
 	SDL_Rect rect;
 	SDL_Rect b_rect;
@@ -295,7 +290,7 @@ string EnterPlayerName(SDL_Window*& window, SDL_Renderer*& renderer)
 	SDL_Surface* temp;
 	SDL_Texture* texture;
 
-	
+
 	SDL_Rect pos;
 	SDL_Rect despos;
 	SDL_Event e;
@@ -341,7 +336,7 @@ string EnterPlayerName(SDL_Window*& window, SDL_Renderer*& renderer)
 				if (e.type == SDL_KEYDOWN && (e.key.keysym.sym == SDLK_KP_ENTER || e.key.keysym.sym == SDLK_RETURN) && text.length() > 0)
 					return text;
 				SDL_RenderCopy(renderer, background, &sourceRect, &desRect);
-				if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_BACKSPACE &&text.length() > 0)
+				if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_BACKSPACE && text.length() > 0)
 					text = text.substr(0, text.length() - 1);
 				else if (e.type == SDL_TEXTINPUT && text.size() <= 15)
 					text += e.text.text;
@@ -370,24 +365,24 @@ string EnterPlayerName(SDL_Window*& window, SDL_Renderer*& renderer)
 }
 
 //Bang Chon the loai choi 
-int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
+int pre_start(SDL_Window * &window, SDL_Renderer * &renderer)
 {
 	string name_player = EnterPlayerName(window, renderer);
 	if (name_player == "")
 		return 0;
-	SDL_Surface* tempSurface = NULL;
-	SDL_Texture* texture = NULL;
+	SDL_Surface * tempSurface = NULL;
+	SDL_Texture * texture = NULL;
 	SDL_Rect sourceRect;
 	SDL_Rect desRect;
 
 	int x, y;
-	TTF_Font* font;
+	TTF_Font * font;
 	font = TTF_OpenFont("font2.ttf", 50);
 	const int NUMMENU = 3;
-	bool selected[NUMMENU] = { 0, 0, 0};
+	bool selected[NUMMENU] = { 0, 0, 0 };
 	//Khoi tao ten cho cac nut man hinh Menu
 	const char* menu[NUMMENU] = { "Modern", "Classic", "Back" };
-	SDL_Surface* menus[NUMMENU];
+	SDL_Surface * menus[NUMMENU];
 	SDL_Rect pos[NUMMENU];
 
 	//Mau khi cham va khong cham cua cac nut man hinh Menu
@@ -440,7 +435,7 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 	desRect.y = 0;
 	desRect.w = sourceRect.w;
 	desRect.h = sourceRect.h;
-	
+
 	//Tao cac demo choi game
 	SDL_Surface* demo = NULL;
 	SDL_Texture* demo1 = NULL;
@@ -475,14 +470,14 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 	d_desrect2.w = d_rect2.w;
 	d_desrect2.h = d_rect2.h;
 
-	
+
 
 	//set background color black
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
 	SDL_Event e;
 	int isRunning = -1;
-	while (isRunning == -1)
+	while (true)
 	{
 		// clear the window to black
 		SDL_RenderClear(renderer);
@@ -585,7 +580,7 @@ int pre_start(SDL_Window*& window, SDL_Renderer*& renderer)
 }
 
 //Bang Top nhung nguoi choi co so diem cao nhat
-void score(SDL_Window*& window, SDL_Renderer*& renderer)
+void score(SDL_Window * &window, SDL_Renderer * &renderer)
 {
 	SDL_Surface* tempSurface = NULL;
 	SDL_Texture* texture = NULL;
@@ -602,12 +597,12 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 	char menu[highScore][11];
 
 	FILE* file;
-	file= fopen("HighScore.txt", "r");
+	file = fopen("HighScore.txt", "r");
 	if (file == NULL)
 	{
 		cout << "Loi mo file\n";
 	}
-	for (int j = 0; j < highScore;j++)
+	for (int j = 0; j < highScore; j++)
 	{
 		fscanf(file, "%s[^\n]", menu[j]);
 	}
@@ -615,12 +610,12 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 
 	//Mau khi cham va khong cham cua cac nut man hinh high score
 	SDL_Color color[2] = { { 246, 235, 0 }, { 255, 0, 0 } };
-	
+
 	SDL_Surface* menus[highScore];
 	SDL_Surface* back_b;
 	SDL_Rect pos[highScore];
 
-	
+
 
 	back_b = TTF_RenderText_Solid(font, back, color[0]);
 
@@ -641,27 +636,27 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 	//Khoi tao mang chua vi tri cac nut man hinh high score
 	SDL_Rect despos[highScore];
 
-	for (int i = 0; i < highScore; i+=2)
+	for (int i = 0; i < highScore; i += 2)
 	{
 		TTF_SizeText(font, menu[i], &pos[i].w, &pos[i].h);
 		pos[i].x = 0;
 		pos[i].y = 0;
 
 		despos[i].x = 430 - pos[0].w / 2;
-		despos[i].y = 180 + i/2 * 94;
+		despos[i].y = 180 + i / 2 * 94;
 
 		despos[i].w = pos[i].w;
 		despos[i].h = pos[i].h;
 
-		TTF_SizeText(font, menu[i+1], &pos[i+1].w, &pos[i+1].h);
-		pos[i+1].x = 0;
-		pos[i+1].y = 0;
+		TTF_SizeText(font, menu[i + 1], &pos[i + 1].w, &pos[i + 1].h);
+		pos[i + 1].x = 0;
+		pos[i + 1].y = 0;
 
-		despos[i+1].x = 750 - pos[1].w / 2;
-		despos[i+1].y = 180 + i/2 * 94;
+		despos[i + 1].x = 750 - pos[1].w / 2;
+		despos[i + 1].y = 180 + i / 2 * 94;
 
-		despos[i+1].w = pos[i+1].w;
-		despos[i+1].h = pos[i+1].h;
+		despos[i + 1].w = pos[i + 1].w;
+		despos[i + 1].h = pos[i + 1].h;
 
 	}
 	//Nut Back
@@ -780,11 +775,11 @@ void score(SDL_Window*& window, SDL_Renderer*& renderer)
 }
 
 //Bang load Game da save
-void load(SDL_Window*& window, SDL_Renderer*& renderer)
+void load(SDL_Window * &window, SDL_Renderer * &renderer)
 {
 	SDL_Color color[2] = { { 246, 235, 0 }, { 225, 0, 0 } };
-	SDL_Surface* tempSurface=NULL;
-	SDL_Texture* texture=NULL;
+	SDL_Surface* tempSurface = NULL;
+	SDL_Texture* texture = NULL;
 	SDL_Rect sourceRect, desRect;
 
 	//Background cua man hinh high score
@@ -819,7 +814,6 @@ void load(SDL_Window*& window, SDL_Renderer*& renderer)
 
 	temp = TTF_RenderText_Solid(font, back, color[0]);
 	b_back = SDL_CreateTextureFromSurface(renderer, temp);
-	SDL_FreeSurface(temp);
 
 	TTF_SizeText(font, back, &b_pos.w, &b_pos.h);
 	b_pos.x = 0;
@@ -871,7 +865,7 @@ void load(SDL_Window*& window, SDL_Renderer*& renderer)
 		desrect[i].w = rect[i].w;
 		desrect[i].h = rect[i].h;
 	}
-	
+
 	string text = "";
 	SDL_Rect pos, despos;
 	SDL_Surface* temp_text;
@@ -880,7 +874,7 @@ void load(SDL_Window*& window, SDL_Renderer*& renderer)
 	temp_text = CreateSurfaceFromString(text.c_str(), font, color[0]);
 	texture_text = SDL_CreateTextureFromSurface(renderer, temp_text);
 	TTF_SizeText(font, text.c_str(), &pos.w, &pos.h);
-	
+
 	pos.x = 0;
 	pos.y = 0;
 
@@ -890,7 +884,7 @@ void load(SDL_Window*& window, SDL_Renderer*& renderer)
 	despos.h = pos.h;
 
 	int selected[numb];
-	int b_selected;
+	int b_selected = 0;
 
 	//Toa do cua con tro
 	int x = 0;
@@ -899,7 +893,7 @@ void load(SDL_Window*& window, SDL_Renderer*& renderer)
 
 	SDL_Event e;
 	SDL_StartTextInput();
-	
+
 	while (true)
 	{
 		while (SDL_PollEvent(&e) != 0)
@@ -996,7 +990,7 @@ void load(SDL_Window*& window, SDL_Renderer*& renderer)
 					return Start_new(window, renderer, "", text);
 				}
 
-				if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_BACKSPACE &&text.length() > 0)
+				if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_BACKSPACE && text.length() > 0)
 					text = text.substr(0, text.length() - 1);
 				else if (e.type == SDL_TEXTINPUT && text.size() <= 15)
 					text += e.text.text;
@@ -1006,13 +1000,13 @@ void load(SDL_Window*& window, SDL_Renderer*& renderer)
 				SDL_FreeSurface(temp_text);
 				temp_text = CreateSurfaceFromString(text.c_str(), font1, color[0]);
 				texture_text = SDL_CreateTextureFromSurface(renderer, temp_text);
-				
+
 				TTF_SizeText(font1, text.c_str(), &pos.w, &pos.h);
 
 				despos.x = 600 - pos.w / 2;
 
 				despos.w = pos.w;
-				despos.h = pos.h;	
+				despos.h = pos.h;
 			}
 		}
 
@@ -1041,13 +1035,23 @@ void exit(SDL_Window*& window, SDL_Renderer*& renderer)
 //Choi game the loai moi
 void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string file_name)
 {
+	int _top = 140;
+	int _bot = 700;
+	int _left = 440;
+	int _right = 850;
+	Paddle p2((_left + _right) / 2, _bot - 20, 120, _left, _right, "init\\bar2.png", renderer, NONE); // tạo thanh trượt dưới 
+	Paddle* _playerBottom = &p2; // trỏ tới thanh trượt dưới
+
+	Ball b((float)(_left + _right) / 2, (float)((_top + _bot) / 2 + 200), "init\\ball.png", renderer, DOWN); // tạo trái banh
+	Ball* _ball = &b; // trỏ tới trái banh
+
+
 	//Lay map ban do
 	const int numb_obj = 160;
 	int ox[numb_obj];
 	int oy[numb_obj];
 	int key[numb_obj];
 	int numb = 0;
-
 	int score = 0;
 	int last_score = 0;
 	ifstream file;
@@ -1067,8 +1071,8 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 		}
 		name = file_name;
 	}
-	else{
-		file.open("map//4.txt");
+	else {
+		file.open("map//3.txt");
 		if (!file)
 		{
 			cout << "mo file loi" << endl;
@@ -1079,7 +1083,6 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 			numb++;
 		}
 	}
-	
 
 	//Bo dong cuoi cung trong file map
 	numb--;
@@ -1089,6 +1092,7 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 	int x, y;
 
 	//Creat object from file
+	Object listObject[160];
 	SDL_Surface* obj[3];
 	obj[0] = IMG_Load("init\\obj_1.bmp");
 	obj[1] = IMG_Load("init\\obj_2.bmp");
@@ -1109,6 +1113,9 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 
 		keyRect[i].w = rect[i].w;
 		keyRect[i].h = rect[i].h;
+
+		listObject[i].Get_Object(keyRect[i].x, keyRect[i].y, keyRect[i].w, keyRect[i].h, key[i]);
+		
 	}
 
 	//Nut Save Game phan ingame
@@ -1119,7 +1126,7 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 	SDL_Rect s_rect;
 	SDL_Rect s_desrect;
 	TTF_Font* font;
-	font = TTF_OpenFont("font2.ttf" , 50);
+	font = TTF_OpenFont("font2.ttf", 50);
 
 	s = TTF_RenderText_Solid(font, sa, color[0]);
 	save = SDL_CreateTextureFromSurface(renderer, s);
@@ -1167,12 +1174,26 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 	desRect.w = sourceRect.w;
 	desRect.h = sourceRect.h;
 
-	
-	string score_text="0";
+
+	//Phan chuong trinh chinh
+
+	string score_text="100";
 	SDL_Event e;
 	int selected =0;
 	while (true)
 	{
+		_playerBottom->setDir(NONE); // sau cập nhật xong thanh trượt thì hướng di chuyển sễ là đứng yên 
+		if (GetAsyncKeyState(VK_LEFT)) //nếu phím mũi tên trái được nhấn
+		{
+			_playerBottom->setDir(PLEFT); // thanh trượt dưới sẽ di chuyển trái
+		}
+		else
+		{
+			if (GetAsyncKeyState(VK_RIGHT)) //nếu phím mũi tên phải được nhấn 
+			{
+				_playerBottom->setDir(PRIGHT); // thanh trượt dưới sẽ di chuyển sang phải 
+			}
+		}
 		SDL_RenderClear(renderer);
 		//main event
 		while (SDL_PollEvent(&e))
@@ -1224,7 +1245,7 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 					file << score << endl;
 					for (int i = 0; i < numb; i++)
 					{
-						if (key[i] != 0)
+						if (listObject[i].getKey() != 0)
 						{
 							file << ox[i] << "	" << oy[i] << "	" << key[i] << endl;
 						}
@@ -1237,7 +1258,7 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 					SDL_Texture* shit_t;
 					SDL_Rect t_rect, t_desrect;
 
-					TTF_Font* font1 = TTF_OpenFont("test.ttf", 100);
+					TTF_Font* font1 = TTF_OpenFont("font2.ttf", 100);
 
 
 					const char* sh = "Saved";
@@ -1263,7 +1284,7 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 					SDL_RenderPresent(renderer);
 					while (true)
 					{
-						while (SDL_PollEvent(&e))
+						while (SDL_PollEvent(&e)!=0)
 						{
 							
 						}
@@ -1292,7 +1313,49 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 			}
 			}
 		}
-		score++;
+		
+
+		SDL_RenderCopy(renderer, texture, &sourceRect, &desRect);
+
+		//Chen cac object vao man hinh
+		for (int i = 0; i < numb; i++)
+		{
+			if (listObject[i].getKey() != DEAD)
+			{
+				SDL_RenderCopy(renderer, object[i], &rect[i], &keyRect[i]);
+			}
+		}
+		SDL_RenderCopy(renderer, save, &s_rect, &s_desrect);
+
+		//xu li di chuyen cua thanh truot
+		_playerBottom->move(); // di chuyển thanh truot
+		_playerBottom->draw(renderer); // vẽ thanh truot
+
+		if (_ball->impactBottom(_playerBottom)) // kiểm tra va chạm với thanh trượt dưới 
+		{
+			//tang van toc 10%
+			if (sqrt(_ball->VX() * _ball->VX() + _ball->VY() * _ball->VY()) < MAX_V)
+			{
+				_playerBottom->SetV(_playerBottom->V() * 105 / 100);
+				_ball->SetVX(_ball->VX() * 110 / 100);
+				_ball->SetVY(_ball->VY() * 110 / 100);
+			}
+		}
+		else
+		{
+			if (_ball->impactWall2(_top, _bot, _left, _right)) // kiểm tra va chạm với wall
+			{
+			}
+		}
+
+		for (int i = 0; i < numb; i++)
+		{
+			if (listObject[i].Collide(_ball) == true)
+			{
+				listObject[i].AfterCollide(_ball, _playerBottom);
+			}
+		}
+		score = _playerBottom->Score();
 		if (score != last_score)
 		{
 			last_score = score;
@@ -1307,16 +1370,12 @@ void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string
 			sc_desrect.w = sc_rect.w;
 			sc_desrect.h = sc_rect.h;
 		}
-		
-		SDL_RenderCopy(renderer, texture, &sourceRect, &desRect);
+
 		SDL_RenderCopy(renderer, text, &sc_rect, &sc_desrect);
-		//Chen cac object vao man hinh
-		for (int i = 0; i < numb; i++)
-		{
-			SDL_RenderCopy(renderer, object[i], &rect[i], &keyRect[i]);
-		}
-		
-		SDL_RenderCopy(renderer, save, &s_rect, &s_desrect);
+		_ball->move(); //di chuyen bong
+		_ball->draw(renderer); //ve bong
+
+		//Update man hinh
 		SDL_RenderPresent(renderer);
 	}
 }
@@ -1328,7 +1387,7 @@ void Start_classic(SDL_Window*& window, SDL_Renderer*& renderer)
 	Game.runGame(window, renderer); // bắt đầu chạy game
 }
 
-//Save game
+//Khung save game
 void Save(SDL_Window*& window, SDL_Renderer*& renderer, string name)
 {
 	ifstream file;

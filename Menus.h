@@ -5,6 +5,9 @@
 #include "iostream"
 #include "fstream"
 #include "string"
+#include "Pong.h"
+#include "Object.h"
+#include <Windows.h>
 
 using namespace std;
 
@@ -25,8 +28,8 @@ void load(SDL_Window*& window, SDL_Renderer*& renderer);
 
 void exit(SDL_Window*& window, SDL_Renderer*& renderer);
 
-void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name);
+void Start_new(SDL_Window*& window, SDL_Renderer*& renderer, string name, string file_name);
 
-void Start_classic();
+void Start_classic(SDL_Window*& window, SDL_Renderer*& renderer);
 
 void Save(SDL_Window*& window, SDL_Renderer*& renderer, string name);
